@@ -1,0 +1,73 @@
+/* Satu-satunya aturan visibilitas layar: yang tidak aktif display: none */
+.screen { display: none; }
+.screen.active { display: flex; }
+
+.is-hidden { display: none !important; }
+
+/* Panggung kamera: rasio sama dengan kanvas 4R (2:3). Video diletakkan tepat di lubang template,
+   PNG template ditumpuk di atasnya sehingga tamu melihat dirinya langsung di dalam bingkai. */
+#stage {
+    position: relative;
+    width: min(92vw, calc(72vh * 2 / 3));
+    aspect-ratio: 2 / 3;
+    margin: 0 auto;
+    overflow: hidden;
+    background: #e5e7eb;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .25);
+}
+#videoFeed { position: absolute; object-fit: cover; z-index: 1; }
+#stageOverlay { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+#countdown { position: absolute; z-index: 10; }
+
+/* Latar landing & ending (dipasang ke body oleh showScreen) */
+body.landing-bg {
+    background: url('bg_landing.png') center bottom / cover no-repeat;
+    background-attachment: fixed;
+}
+.landing-title { width: min(86vw, 560px); height: auto; filter: drop-shadow(0 4px 12px rgba(255, 255, 255, .7)); }
+.start-btn { width: min(70vw, 420px); padding: 0; border: 0; background: none; cursor: pointer; transition: transform .15s; }
+.start-btn img { display: block; width: 100%; height: auto; filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .3)); }
+.start-btn:hover { transform: scale(1.05); }
+.start-btn:active { transform: scale(.97); }
+.start-btn:disabled { opacity: .6; cursor: wait; transform: none; }
+
+/* Popup bubble QR */
+@keyframes bubble-pop { 0% { transform: scale(.6); opacity: 0; } 70% { transform: scale(1.04); opacity: 1; } 100% { transform: scale(1); } }
+.bubble { animation: bubble-pop .35s ease-out; }
+
+/* ===== Cetak: hanya canvas, kertas foto 4R (4x6 inci) tanpa margin ===== */
+@page { size: 4in 6in; margin: 0; }
+
+@media print {
+    html, body {
+        width: 4in !important;
+        height: 6in !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background: #fff !important;
+    }
+    /* Sembunyikan semua UI selain canvas */
+    #screen-home, #screen-camera, #screen-ending,
+    #saveBtn, #saveStatus, #qrModal { display: none !important; }
+
+    main, #screen-final {
+        display: block !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+    #photoCanvas {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        max-width: none !important;
+        margin: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+}

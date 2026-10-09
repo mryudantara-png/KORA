@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Booth Ulang Tahun</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Menghubungkan ke file CSS eksternal -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 min-h-screen landing-bg">
+
+    <main class="min-h-screen flex items-center justify-center p-6">
+
+        <!-- ================= SCREEN 1: HOME ================= -->
+        <section id="screen-home" class="screen active w-full max-w-xl flex-col items-center justify-center gap-8 text-center">
+            <img src="Title.png" alt="Kora's 5th Birthday" class="landing-title">
+
+            <p id="homeError" class="hidden text-sm font-semibold text-red-700 bg-white/85 rounded-lg px-4 py-2"></p>
+
+            <button id="startBtn" type="button" class="start-btn" aria-label="Mulai Foto">
+                <img src="tombol_mulai.png" alt="Mulai Foto">
+            </button>
+        </section>
+
+        <!-- ================= SCREEN 2: KAMERA & REVIEW ================= -->
+        <section id="screen-camera" class="screen w-full max-w-3xl flex-col items-center gap-4">
+            <p id="shotIndicator" class="text-xl font-semibold text-gray-700">
+                Foto ke-<span id="shotNumber">1</span> dari <span id="shotTotal">4</span>
+            </p>
+
+            <div id="stage">
+                <video id="videoFeed" autoplay playsinline muted class="transform scale-x-[-1]"></video>
+                <img id="stageOverlay" alt="" class="is-hidden">
+                <div id="countdown" class="is-hidden flex items-center justify-center text-white text-9xl font-bold bg-black/30 drop-shadow-lg" aria-live="assertive"></div>
+            </div>
+
+            <div id="captureActions" class="flex justify-center">
+                <button id="captureBtn" class="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 px-10 rounded-full shadow-lg transition-colors text-lg">
+                    📸 Ambil Foto
+                </button>
+            </div>
+
+            <div id="reviewActions" class="is-hidden flex-row gap-4">
+                <button id="retakeBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-4 px-8 rounded-full shadow-lg transition-colors text-lg">
+                    🔄 Ulangi Foto Ini
+                </button>
+                <button id="nextBtn" class="bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-full shadow-lg transition-colors text-lg">
+                    Lanjut
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= SCREEN 3: FINAL ================= -->
+        <section id="screen-final" class="screen w-full max-w-md flex-col items-center gap-6">
+            <canvas id="photoCanvas" class="w-full h-auto shadow-2xl rounded-sm border border-gray-200"></canvas>
+
+            <button id="saveBtn" class="w-full bg-green-600 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors">
+                💾 Simpan
+            </button>
+
+            <p id="saveStatus" class="is-hidden text-sm text-red-600 text-center"></p>
+        </section>
+
+        <!-- ================= SCREEN 4: ENDING ================= -->
+        <section id="screen-ending" class="screen w-full max-w-xl flex-col items-center justify-center gap-6 text-center">
+            <img src="Title.png" alt="Kora's 5th Birthday" class="landing-title">
+            <p class="text-3xl font-bold text-slate-800 drop-shadow-[0_2px_6px_rgba(255,255,255,.8)]">Terima kasih! 🎉</p>
+            <p class="text-lg font-semibold text-slate-700 bg-white/70 rounded-xl px-5 py-2">Fotomu sedang dicetak. Jangan lupa ambil hasil cetaknya ya!</p>
+            <p id="endingCountdown" class="text-sm text-slate-700 bg-white/60 rounded-full px-4 py-1"></p>
+            <button id="endingBtn" type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors">
+                Kembali ke Awal
+            </button>
+        </section>
+
+    </main>
+
+    <!-- Popup bubble: QR Code + opsi lanjut cetak (muncul setelah foto tersimpan di Drive) -->
+    <div id="qrModal" class="is-hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6" role="dialog" aria-modal="true">
+        <div class="bubble w-full max-w-sm bg-white rounded-[2rem] border-4 border-sky-300 shadow-2xl p-8 flex flex-col items-center gap-4 text-center">
+            <p class="text-green-700 font-bold text-xl">✅ Foto Berhasil Disimpan!</p>
+            <p class="text-gray-600 text-sm">Scan QR Code ini dengan kamera HP untuk mengunduh fotomu.</p>
+            <div id="qrcode" class="p-3 bg-white border border-gray-200 rounded-lg"></div>
+            <button id="printBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-colors">
+                🖨️ Lanjut Cetak
+            </button>
+        </div>
+    </div>
+
+    <!-- Menghubungkan ke file JavaScript eksternal -->
+    <script src="script.js"></script>
+</body>
+</html>
